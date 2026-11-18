@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tanush Pilla Portfolio</title>
+<!--
+  FILES THIS PAGE NEEDS (upload them next to this file):
+    Tanush_Pilla_Resume.pdf
+    images/robot.jpg
+    images/video-1.mp4, images/video-2.mp4, images/video-3.mp4
+
+  TO ADD YOUR CAD MODEL: find the "CAD MODEL" comment further down and follow the steps there.
+  TO ADD YOUR GITHUB: replace the two href="#" links with your GitHub links.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: one project, set out like an engineering drawing sheet with a title block. Photo first. */
+:root {
+  --paper: #f3f5f7;
+  --sheet: #ffffff;
+  --ink: #16212e;
+  --muted: #5a6878;
+  --line: #cfd7e0;
+  --accent: #d9530f;
+  --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --body: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0f151c; --sheet: #16202a; --ink: #e6ecf2; --muted: #93a2b2;
+    --line: #2a3846; --accent: #ff7a3a; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0f151c; --sheet: #16202a; --ink: #e6ecf2; --muted: #93a2b2;
+  --line: #2a3846; --accent: #ff7a3a; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--paper); color: var(--ink); font: 400 17px/1.55 var(--body); -webkit-font-smoothing: antialiased; }
+a { color: var(--accent); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.wrap { max-width: 1040px; margin: 0 auto; padding: 0 20px; }
+
+/* Header */
+header.top { padding: 44px 0 28px; }
+.tag { font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+h1 { font: 800 clamp(36px, 6vw, 56px)/1.02 var(--display); letter-spacing: -.02em; margin: 12px 0 10px; }
+.lede { font-size: 19px; color: var(--muted); margin: 0 0 20px; max-width: 60ch; }
+.lede strong { color: var(--ink); font-weight: 500; }
+.links { display: flex; flex-wrap: wrap; gap: 10px; }
+.links a { font: 500 14px/1 var(--mono); text-decoration: none; color: var(--ink); border: 1px solid var(--line); background: var(--sheet); padding: 10px 14px; border-radius: 3px; }
+.links a:hover { border-color: var(--accent); color: var(--accent); }
+.links a.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+/* Project sheet */
+.sheet { background: var(--sheet); border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
+.hero { display: grid; grid-template-columns: 1fr 1.1fr; }
+.hero img { width: 100%; height: 100%; max-height: 640px; object-fit: cover; display: block; }
+.summary { padding: 32px; display: flex; flex-direction: column; gap: 18px; }
+.summary h2 { font: 800 32px/1.08 var(--display); letter-spacing: -.01em; margin: 0; }
+.summary p { margin: 0; }
+.summary ul { margin: 0; padding-left: 18px; display: grid; gap: 8px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font: 500 12px/1 var(--mono); padding: 6px 9px; border: 1px solid var(--line); border-radius: 2px; }
+.code-link { font: 500 14px/1 var(--mono); }
+
+/* Sections inside the sheet */
+.block { padding: 28px 32px; border-top: 1px solid var(--line); }
+h3 { font: 700 12px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 0 0 16px; }
+
+/* Videos: column widths match each clip's shape so all three are the same height */
+.videos { display: grid; grid-template-columns: 16fr 5.06fr 16fr; gap: 12px; }
+.videos video { width: 100%; height: auto; display: block; border-radius: 3px; background: #000; }
+
+/* CAD placeholder */
+.cad { aspect-ratio: 16 / 9; border: 1.5px dashed var(--line); border-radius: 3px; display: grid; place-items: center; text-align: center; padding: 16px; font: 400 14px/1.5 var(--mono); color: var(--muted);
+  background: repeating-linear-gradient(135deg, transparent 0 10px, color-mix(in srgb, var(--line) 35%, transparent) 10px 11px); }
+.cad iframe, .cad model-viewer { width: 100%; height: 100%; border: 0; }
+
+/* Title block */
+.titleblock { display: grid; grid-template-columns: repeat(5, 1fr); border-top: 1.5px solid var(--ink); }
+.titleblock div { padding: 10px 14px; border-right: 1px solid var(--line); }
+.titleblock div:last-child { border-right: 0; }
+.titleblock span { display: block; font: 400 10px/1.2 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.titleblock b { font: 500 13px/1.3 var(--mono); }
+
+footer { padding: 28px 0 44px; color: var(--muted); font-size: 15px; display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
+
+@media (max-width: 800px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero img { max-height: 520px; }
+  .summary, .block { padding: 22px 20px; }
+  .videos { grid-template-columns: 1fr 1fr; }
+  .videos video:first-child { grid-column: 1 / -1; }
+  .titleblock { grid-template-columns: repeat(2, 1fr); }
+  .titleblock div { border-bottom: 1px solid var(--line); }
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="tag">Mechanical Engineering Co-op · University of Waterloo</div>
+    <h1>Tanush Pilla</h1>
+    <p class="lede">I design, print, wire and program robots. <strong>Looking for robotics and aerospace co-op roles.</strong></p>
+    <nav class="links" aria-label="Contact links">
+      <a class="primary" href="Tanush_Pilla_Resume.pdf" target="_blank" rel="noopener">Resume (PDF)</a>
+      <a href="https://www.linkedin.com/in/tanush-pilla-b7b0a8281/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="mailto:tanushpilla@gmail.com">tanushpilla@gmail.com</a>
+      <a href="#">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <article class="sheet" id="balancing-robot">
+
+    <div class="hero">
+      <img src="images/robot.jpg" alt="Self-balancing robot with a white 3D-printed chassis and yellow wheels">
+      <div class="summary">
+        <div class="tag">Personal project · Fall 2026</div>
+        <h2>Self-Balancing Robot</h2>
+        <p>A two-wheeled robot that keeps itself upright, built from scratch.</p>
+        <ul>
+          <li>Designed and 3D-printed the chassis</li>
+          <li>Wrote the control code in C++: sensor fusion and PID control at 200&nbsp;Hz</li>
+          <li>Added drift correction and a live tuning tool with saved settings</li>
+        </ul>
+        <div class="chips">
+          <span class="chip">Arduino</span><span class="chip">C++</span><span class="chip">PID control</span>
+          <span class="chip">IMU / sensor fusion</span><span class="chip">CAD</span><span class="chip">3D printing</span>
+        </div>
+        <a class="code-link" href="#">View code on GitHub →</a>
+      </div>
+    </div>
+
+    <section class="block" aria-labelledby="vid-h">
+      <h3 id="vid-h">See it balance</h3>
+      <div class="videos">
+        <video src="images/video-1.mp4" autoplay muted loop playsinline aria-label="Robot balancing, video 1"></video>
+        <video src="images/video-2.mp4" autoplay muted loop playsinline aria-label="Robot balancing, video 2"></video>
+        <video src="images/video-3.mp4" autoplay muted loop playsinline aria-label="Robot balancing, video 3"></video>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="cad-h">
+      <h3 id="cad-h">Interactive CAD model</h3>
+      <!--
+        CAD MODEL: replace the whole <div class="cad">...</div> below with ONE of these.
+
+        Option A (Fusion 360): open the design, click Share > Public Link, turn on "Embed",
+        copy the embed code, and paste it inside the div like this:
+          <div class="cad"><iframe src="PASTE-LINK-HERE" allowfullscreen></iframe></div>
+
+        Option B (Onshape): click Share > make it public > copy the link, then use the same iframe line.
+
+        Option C (any CAD program): export your model as a .glb file, upload it to images/,
+        then paste these two lines instead:
+          <script type="module" src="https://unpkg.com/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
+          <div class="cad"><model-viewer src="images/robot.glb" camera-controls auto-rotate alt="3D model of the robot"></model-viewer></div>
+      -->
+      <div class="cad">CAD model goes here<br>Visitors will be able to rotate and zoom it</div>
+    </section>
+
+    <div class="titleblock">
+      <div><span>Controller</span><b>Arduino Uno</b></div>
+      <div><span>Sensor</span><b>MPU-6050</b></div>
+      <div><span>Drive</span><b>L298N + DC motors</b></div>
+      <div><span>Power</span><b>3S LiPo</b></div>
+      <div><span>Rev</span><b>v6</b></div>
+    </div>
+  </article>
+</main>
+
+<footer class="wrap">
+  <span>Tanush Pilla · Mechanical Engineering, University of Waterloo</span>
+  <span>Last updated November 2026</span>
+</footer>
+
+</body>
+</html>
