@@ -5,25 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Tanush Pilla Portfolio</title>
 <!--
-  FILES THIS PAGE NEEDS (upload them next to this file):
-    Tanush_Pilla_Resume.pdf
-    images/robot.jpg
-    images/video-1.mp4, images/video-2.mp4, images/video-3.mp4
-
-  TO ADD YOUR CAD MODEL: find the "CAD MODEL" comment further down and follow the steps there.
-  TO ADD YOUR GITHUB: replace the two href="#" links with your GitHub links.
+  HOW TO EDIT THIS PAGE
+  - Projects: each project has a CARD in the gallery and a WINDOW (<dialog>) further down with the same id
+    (card data-open="p-robot" opens <dialog id="p-robot">). To add one, copy a card and a dialog and give them a new matching id.
+  - Files it needs, uploaded next to this file: Tanush_Pilla_Resume.pdf, robot.jpg, video-1.mp4, video-2.mp4, video-3.mp4
+  - Placeholders: every grey striped box is a spot for a picture. Replace the whole
+      <div class="ph">...</div>   with   <img src="your-photo.jpg" alt="what the photo shows">
+    and upload your-photo.jpg next to this file.
+  - Text in [square brackets] is for you to fill in or delete.
+  - GitHub: replace every href="#github" with your GitHub link.
+  - CAD model: export your model as robot.glb and upload it next to this file. It appears automatically
+    in the project card and on the left side of the project window.
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700;800;900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script type="module" src="https://unpkg.com/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
 <style>
-/* Layout idea: one project, set out like an engineering drawing sheet with a title block. Photo first. */
+/* Layout idea: a drafting sheet. Gallery of project cards up top; each card opens a project window. */
 :root {
   --paper: #f3f5f7;
   --sheet: #ffffff;
   --ink: #16212e;
   --muted: #5a6878;
-  --line: #cfd7e0;
+  --line: #d3dae2;
   --accent: #d9530f;
   --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
   --body: "Archivo", "Helvetica Neue", Arial, sans-serif;
@@ -42,148 +47,406 @@
 }
 
 * { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
 html, body { margin: 0; }
 body { background: var(--paper); color: var(--ink); font: 400 17px/1.55 var(--body); -webkit-font-smoothing: antialiased; }
 a { color: var(--accent); }
-a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-.wrap { max-width: 1040px; margin: 0 auto; padding: 0 20px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+img, video { max-width: 100%; display: block; }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+.mono { font-family: var(--mono); }
+.eyebrow { font: 500 12px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.eyebrow b { color: var(--accent); font-weight: 500; }
 
-/* Header */
-header.top { padding: 44px 0 28px; }
-.tag { font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
-h1 { font: 800 clamp(36px, 6vw, 56px)/1.02 var(--display); letter-spacing: -.02em; margin: 12px 0 10px; }
-.lede { font-size: 19px; color: var(--muted); margin: 0 0 20px; max-width: 60ch; }
-.lede strong { color: var(--ink); font-weight: 500; }
-.links { display: flex; flex-wrap: wrap; gap: 10px; }
-.links a { font: 500 14px/1 var(--mono); text-decoration: none; color: var(--ink); border: 1px solid var(--line); background: var(--sheet); padding: 10px 14px; border-radius: 3px; }
-.links a:hover { border-color: var(--accent); color: var(--accent); }
-.links a.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+/* Nav */
+nav.top { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--paper) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+nav.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 60px; }
+.logo { font: 900 18px/1 var(--display); letter-spacing: .02em; color: var(--ink); text-decoration: none; }
+.navlinks { display: flex; gap: 22px; align-items: center; }
+.navlinks a { font: 500 13px/1 var(--mono); text-transform: uppercase; letter-spacing: .06em; color: var(--muted); text-decoration: none; }
+.navlinks a:hover { color: var(--ink); }
+.btn { display: inline-flex; align-items: center; gap: 8px; font: 500 14px/1 var(--mono); text-decoration: none; color: var(--ink); border: 1px solid var(--line); background: var(--sheet); padding: 12px 16px; border-radius: 3px; cursor: pointer; }
+.btn:hover { border-color: var(--accent); color: var(--accent); }
+.btn.solid { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.btn.solid:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+.navlinks .btn { padding: 9px 12px; font-size: 12px; }
 
-/* Project sheet */
-.sheet { background: var(--sheet); border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
-.hero { display: grid; grid-template-columns: 1fr 1.1fr; }
-.hero img { width: 100%; height: 100%; max-height: 640px; object-fit: cover; display: block; }
-.summary { padding: 32px; display: flex; flex-direction: column; gap: 18px; }
-.summary h2 { font: 800 32px/1.08 var(--display); letter-spacing: -.01em; margin: 0; }
-.summary p { margin: 0; }
-.summary ul { margin: 0; padding-left: 18px; display: grid; gap: 8px; }
-.chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.chip { font: 500 12px/1 var(--mono); padding: 6px 9px; border: 1px solid var(--line); border-radius: 2px; }
-.code-link { font: 500 14px/1 var(--mono); }
+/* Hero / intro */
+.hero { padding: 72px 0 64px; border-bottom: 1px solid var(--line);
+  background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 40px 40px; background-position: -1px -1px; }
+.hero .wrap { display: grid; grid-template-columns: 1.5fr 1fr; gap: 40px; align-items: end; }
+.hero h1 { font: 900 clamp(52px, 10vw, 112px)/.9 var(--display); letter-spacing: -.035em; margin: 18px 0 20px; }
+.hero h1 span { color: var(--accent); }
+.hero p { font-size: 20px; max-width: 34ch; margin: 0 0 28px; }
+.hero .actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.status { background: var(--sheet); border: 1.5px solid var(--ink); }
+.status div { display: grid; grid-template-columns: 110px 1fr; border-bottom: 1px solid var(--line); }
+.status div:last-child { border-bottom: 0; }
+.status span, .status b { padding: 10px 14px; font: 400 13px/1.4 var(--mono); }
+.status span { color: var(--muted); text-transform: uppercase; letter-spacing: .06em; font-size: 11px; border-right: 1px solid var(--line); display: flex; align-items: center; }
+.status b { font-weight: 500; }
+.dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #2fa36b; margin-right: 8px; vertical-align: 1px; }
 
-/* Sections inside the sheet */
-.block { padding: 28px 32px; border-top: 1px solid var(--line); }
-h3 { font: 700 12px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 0 0 16px; }
+/* Section headings */
+section.block { padding: 72px 0 8px; }
+.head { display: flex; justify-content: space-between; align-items: end; gap: 20px; flex-wrap: wrap; margin-bottom: 28px; }
+.head h2 { font: 800 clamp(32px, 5vw, 48px)/1 var(--display); letter-spacing: -.02em; margin: 10px 0 0; }
+.head p { margin: 0; color: var(--muted); max-width: 40ch; }
 
-/* Videos: column widths match each clip's shape so all three are the same height */
-.videos { display: grid; grid-template-columns: 16fr 5.06fr 16fr; gap: 12px; }
-.videos video { width: 100%; height: auto; display: block; border-radius: 3px; background: #000; }
+/* Placeholder image box */
+.ph { width: 100%; height: 100%; min-height: 180px; display: grid; place-items: center; text-align: center; padding: 16px;
+  font: 400 13px/1.5 var(--mono); color: var(--muted); background-color: var(--paper);
+  background-image: repeating-linear-gradient(135deg, transparent 0 10px, color-mix(in srgb, var(--line) 60%, transparent) 10px 11px); }
 
-/* CAD placeholder */
-.cad { aspect-ratio: 16 / 9; border: 1.5px dashed var(--line); border-radius: 3px; display: grid; place-items: center; text-align: center; padding: 16px; font: 400 14px/1.5 var(--mono); color: var(--muted);
-  background: repeating-linear-gradient(135deg, transparent 0 10px, color-mix(in srgb, var(--line) 35%, transparent) 10px 11px); }
-.cad iframe, .cad model-viewer { width: 100%; height: 100%; border: 0; }
+/* Gallery: two big cards per row; each opens a project window */
+.gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+.card { all: unset; box-sizing: border-box; display: flex; flex-direction: column; background: var(--sheet); border: 1px solid var(--line); border-radius: 4px; overflow: hidden; cursor: pointer; position: relative; transition: border-color .2s ease; }
+.card:hover { border-color: var(--ink); }
+.card .media model-viewer { width: 100%; height: 100%; pointer-events: none; --poster-color: transparent; background: var(--paper); }
+.badge { position: absolute; left: 14px; top: 14px; font: 500 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; background: var(--sheet); color: var(--ink); border: 1px solid var(--line); padding: 7px 9px; border-radius: 2px; }
+.card:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.card .media { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: var(--paper); }
+.card .media img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
+.card:hover .media img { transform: scale(1.04); }
+.card .media .ph { position: absolute; inset: 0; }
+.card .hint { position: absolute; right: 14px; bottom: 14px; font: 500 12px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; background: var(--ink); color: var(--paper); padding: 9px 12px; border-radius: 2px; opacity: 0; transform: translateY(6px); transition: opacity .2s ease, transform .2s ease; }
+.card:hover .hint, .card:focus-visible .hint { opacity: 1; transform: none; }
+.card .body { padding: 26px 30px 30px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+.caption { display: flex; align-items: center; gap: 10px; font: 400 12px/1.3 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.caption::before { content: ""; width: 26px; height: 2px; background: var(--accent); flex: none; }
+.card h3 { font: 800 clamp(26px, 3vw, 34px)/1.05 var(--display); letter-spacing: -.015em; margin: 0; }
+.role { font: 500 13px/1.4 var(--mono); color: var(--accent); }
+.card p { margin: 0; color: var(--muted); }
+.statline { font: 500 12px/1.5 var(--mono); letter-spacing: .06em; text-transform: uppercase; border: 1px solid var(--line); padding: 9px 12px; align-self: flex-start; }
+.card .foot { margin-top: auto; padding-top: 8px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.date { font: 400 13px/1 var(--mono); color: var(--muted); }
+.card.soon h3, .card.soon p { opacity: .7; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag { font: 500 11px/1 var(--mono); letter-spacing: .04em; text-transform: uppercase; padding: 6px 8px; border: 1px solid var(--line); border-radius: 2px; color: var(--muted); }
 
-/* Title block */
-.titleblock { display: grid; grid-template-columns: repeat(5, 1fr); border-top: 1.5px solid var(--ink); }
-.titleblock div { padding: 10px 14px; border-right: 1px solid var(--line); }
-.titleblock div:last-child { border-right: 0; }
-.titleblock span { display: block; font: 400 10px/1.2 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
-.titleblock b { font: 500 13px/1.3 var(--mono); }
+/* Project window */
+dialog.proj { width: min(1280px, calc(100% - 32px)); height: calc(100% - 48px); max-height: calc(100% - 48px); padding: 0; border: 1px solid var(--line); border-radius: 4px; background: var(--sheet); color: var(--ink); overflow: hidden; }
+dialog.proj[open] { display: flex; flex-direction: column; }
+dialog.proj::backdrop { background: rgba(8, 12, 18, .72); backdrop-filter: blur(4px); }
+.dhead { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; padding: 24px 30px 20px; border-bottom: 1px solid var(--line); }
+.dhead h2 { font: 800 clamp(26px, 3.4vw, 38px)/1.05 var(--display); letter-spacing: -.015em; margin: 0 0 8px; }
+.dhead h2::before { content: ""; display: block; width: 40px; height: 3px; background: var(--accent); margin-bottom: 12px; }
+.dhead .date { display: block; margin-top: 8px; }
+.close { all: unset; cursor: pointer; width: 40px; height: 40px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 3px; font: 400 22px/1 var(--display); flex: none; }
+.close:hover { border-color: var(--accent); color: var(--accent); }
+.close:focus-visible { outline: 2px solid var(--accent); }
+.dbody { display: grid; grid-template-columns: 1fr 1fr; min-height: 0; flex: 1; }
+.viewer { position: relative; border-right: 1px solid var(--line); background: radial-gradient(ellipse at 50% 45%, var(--sheet), var(--paper) 70%); min-height: 420px; }
+.viewer model-viewer { position: absolute; inset: 0; width: 100%; height: 100%; --poster-color: transparent; }
+.pill { position: absolute; left: 50%; bottom: 20px; transform: translateX(-50%); white-space: nowrap; font: 500 13px/1 var(--mono); background: var(--sheet); border: 1px solid var(--line); color: var(--ink); padding: 11px 18px; border-radius: 999px; pointer-events: none; }
+.dtext { padding: 28px 30px 34px; overflow-y: auto; display: flex; flex-direction: column; gap: 18px; }
+.dtext .lead { font-size: 19px; margin: 0; }
+.dtext p { margin: 0; color: var(--muted); }
+.dtext ul { margin: 0; padding-left: 18px; display: grid; gap: 7px; }
+.dtext h4 { font: 500 12px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 8px 0 0; padding-top: 18px; border-top: 1px solid var(--line); }
+.thumbs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.thumbs figure { margin: 0; border: 1px solid var(--line); border-radius: 3px; overflow: hidden; background: var(--paper); }
+.thumbs img, .thumbs video { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; background: #000; }
+.thumbs figcaption { font: 400 12px/1.4 var(--mono); letter-spacing: .03em; color: var(--muted); padding: 10px 12px; }
+.specs { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); }
+.specs div { padding: 10px 12px; border-bottom: 1px solid var(--line); border-right: 1px solid var(--line); }
+.specs div:nth-child(2n) { border-right: 0; }
+.specs div:nth-last-child(-n+2) { border-bottom: 0; }
+.specs span { display: block; font: 400 10px/1.2 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.specs b { font: 500 13px/1.3 var(--mono); }
+body.locked { overflow: hidden; }
 
-footer { padding: 28px 0 44px; color: var(--muted); font-size: 15px; display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
+/* Skills */
+.skills { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.skills > div { background: var(--sheet); padding: 22px; }
+.skills h3 { font: 700 17px/1.2 var(--display); margin: 10px 0 8px; }
+.skills p { margin: 0; color: var(--muted); font-size: 15px; }
 
-@media (max-width: 800px) {
-  .hero { grid-template-columns: 1fr; }
-  .hero img { max-height: 520px; }
-  .summary, .block { padding: 22px 20px; }
-  .videos { grid-template-columns: 1fr 1fr; }
-  .videos video:first-child { grid-column: 1 / -1; }
-  .titleblock { grid-template-columns: repeat(2, 1fr); }
-  .titleblock div { border-bottom: 1px solid var(--line); }
+/* About */
+.about { display: grid; grid-template-columns: 1fr 1.3fr; gap: 40px; }
+.facts { border: 1.5px solid var(--ink); background: var(--sheet); align-self: start; }
+.facts div { display: grid; grid-template-columns: 120px 1fr; border-bottom: 1px solid var(--line); }
+.facts div:last-child { border-bottom: 0; }
+.facts span, .facts b { padding: 11px 14px; font: 400 14px/1.4 var(--mono); }
+.facts span { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); border-right: 1px solid var(--line); }
+.facts b { font-weight: 500; }
+.about .bio p { margin: 0 0 16px; font-size: 18px; max-width: 60ch; }
+.about h3 { font: 500 12px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 28px 0 12px; }
+.awards { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.awards li { display: flex; justify-content: space-between; gap: 16px; padding: 11px 0; border-bottom: 1px solid var(--line); }
+.awards li span { color: var(--muted); font: 400 13px/1.5 var(--mono); white-space: nowrap; }
+
+/* Contact */
+.contact { background: var(--ink); color: var(--paper); margin-top: 80px; padding: 72px 0 40px; }
+.contact h2 { font: 900 clamp(40px, 7vw, 80px)/.95 var(--display); letter-spacing: -.03em; margin: 12px 0 28px; }
+.contact .eyebrow { color: color-mix(in srgb, var(--paper) 65%, transparent); }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.contact .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.contact .btn { background: transparent; color: var(--paper); border-color: color-mix(in srgb, var(--paper) 35%, transparent); }
+.contact .btn:hover { border-color: var(--accent); color: var(--accent); }
+.contact .btn.solid { background: var(--accent); border-color: var(--accent); color: #fff; }
+.contact .email { font: 500 clamp(18px, 3vw, 26px)/1.2 var(--mono); color: var(--paper); text-decoration: none; margin-right: 8px; }
+.contact footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-top: 64px; padding-top: 20px; border-top: 1px solid color-mix(in srgb, var(--paper) 20%, transparent); font: 400 12px/1.4 var(--mono); color: color-mix(in srgb, var(--paper) 60%, transparent); }
+
+@media (max-width: 900px) {
+  .dbody { grid-template-columns: 1fr; overflow-y: auto; }
+  .viewer { border-right: 0; border-bottom: 1px solid var(--line); min-height: 360px; }
+  .dtext { overflow: visible; }
+  .hero .wrap, .about { grid-template-columns: 1fr; }
+  .skills { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px) {
+  .navlinks a:not(.btn) { display: none; }
+  .gallery, .skills { grid-template-columns: 1fr; }
+  .card .body, .dtext, .dhead { padding-left: 20px; padding-right: 20px; }
+  .status div, .facts div { grid-template-columns: 96px 1fr; }
 }
 </style>
 </head>
 <body>
 
-<header class="top">
+<nav class="top" aria-label="Main">
   <div class="wrap">
-    <div class="tag">Mechanical Engineering Co-op · University of Waterloo</div>
-    <h1>Tanush Pilla</h1>
-    <p class="lede">I design, print, wire and program robots. <strong>Looking for robotics and aerospace co-op roles.</strong></p>
-    <nav class="links" aria-label="Contact links">
-      <a class="primary" href="Tanush_Pilla_Resume.pdf" target="_blank" rel="noopener">Resume (PDF)</a>
-      <a href="https://www.linkedin.com/in/tanush-pilla-b7b0a8281/" target="_blank" rel="noopener">LinkedIn</a>
-      <a href="mailto:tanushpilla@gmail.com">tanushpilla@gmail.com</a>
-      <a href="#">GitHub</a>
-    </nav>
+    <a class="logo" href="#intro">TANUSH PILLA</a>
+    <div class="navlinks">
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+      <a class="btn solid" href="Tanush_Pilla_Resume.pdf" target="_blank" rel="noopener">Resume ↗</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ INTRO ============ -->
+<header class="hero" id="intro">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow"><b>01</b> · Mechanical Engineering · University of Waterloo</div>
+      <h1>Tanush<br>Pilla<span>.</span></h1>
+      <p>I design, 3D-print, wire and program robots. Looking for robotics and aerospace co-op roles.</p>
+      <div class="actions">
+        <a class="btn solid" href="#projects">View projects ↓</a>
+        <a class="btn" href="Tanush_Pilla_Resume.pdf" target="_blank" rel="noopener">Resume ↗</a>
+        <a class="btn" href="https://www.linkedin.com/in/tanush-pilla-b7b0a8281/" target="_blank" rel="noopener">LinkedIn ↗</a>
+      </div>
+    </div>
+    <div class="status" aria-label="Availability">
+      <div><span>Seeking</span><b><i class="dot" aria-hidden="true"></i>Co-op: robotics &amp; aerospace</b></div>
+      <div><span>Term</span><b>[e.g. Summer 2027]</b></div>
+      <div><span>Program</span><b>BASc Mechanical Eng., Co-op</b></div>
+      <div><span>Grad</span><b>2031</b></div>
+      <div><span>Based in</span><b>Waterloo / Milton, ON</b></div>
+    </div>
   </div>
 </header>
 
-<main class="wrap">
-  <article class="sheet" id="balancing-robot">
+<main>
 
-    <div class="hero">
-      <img src="robot.jpg" alt="Self-balancing robot with a white 3D-printed chassis and yellow wheels">
-      <div class="summary">
-        <div class="tag">Personal project · Fall 2026</div>
-        <h2>Self-Balancing Robot</h2>
-        <p>A two-wheeled robot that keeps itself upright, built from scratch.</p>
-        <ul>
-          <li>Designed and 3D-printed the chassis</li>
-          <li>Wrote the control code in C++: sensor fusion and PID control at 200&nbsp;Hz</li>
-          <li>Added drift correction and a live tuning tool with saved settings</li>
-        </ul>
-        <div class="chips">
-          <span class="chip">Arduino</span><span class="chip">C++</span><span class="chip">PID control</span>
-          <span class="chip">IMU / sensor fusion</span><span class="chip">CAD</span><span class="chip">3D printing</span>
+  <!-- ============ PROJECTS GALLERY ============ -->
+  <section class="block" id="projects">
+    <div class="wrap">
+      <div class="head">
+        <div>
+          <div class="eyebrow"><b>02</b> · Selected work</div>
+          <h2>Projects</h2>
         </div>
-        <a class="code-link" href="#">View code on GitHub →</a>
+        <p>Click a project to see the full build.</p>
+      </div>
+
+      <!-- Each card opens the window with the matching id in data-open. -->
+      <div class="gallery">
+
+        <button class="card" type="button" data-open="p-robot">
+          <div class="media">
+            <!-- 3D preview: shows the photo until robot.glb is uploaded next to this file -->
+            <model-viewer src="robot.glb" poster="robot.jpg" auto-rotate rotation-per-second="18deg" interaction-prompt="none" disable-zoom camera-orbit="35deg 75deg auto" shadow-intensity="1" alt="3D model of the self-balancing robot"></model-viewer>
+            <span class="badge">3D model</span>
+            <span class="hint">Click to explore ↗</span>
+          </div>
+          <div class="body">
+            <div class="caption">Built robot, v6</div>
+            <h3>Self-Balancing Robot</h3>
+            <div class="role">Solo build · Design · Electronics · Firmware</div>
+            <p>Two-wheeled robot that keeps itself upright. Custom 3D-printed chassis and control code written from scratch.</p>
+            <div class="statline">200 Hz control · PID + sensor fusion · Live tuning</div>
+            <div class="foot">
+              <div class="tags"><span class="tag">Arduino</span><span class="tag">C++</span><span class="tag">MPU-6050</span><span class="tag">FDM</span></div>
+              <span class="date">2026</span>
+            </div>
+          </div>
+        </button>
+
+
+
+
       </div>
     </div>
+  </section>
 
-    <section class="block" aria-labelledby="vid-h">
-      <h3 id="vid-h">See it balance</h3>
-      <div class="videos">
-        <video src="video-1.mp4" autoplay muted loop playsinline aria-label="Robot balancing, video 1"></video>
-        <video src="video-2.mp4" autoplay muted loop playsinline aria-label="Robot balancing, video 2"></video>
-        <video src="video-3.mp4" autoplay muted loop playsinline aria-label="Robot balancing, video 3"></video>
+  <!-- ============ PROJECT WINDOWS (open when a card is clicked) ============ -->
+
+  <dialog class="proj" id="p-robot" aria-labelledby="p-robot-t">
+    <div class="dhead">
+      <div>
+        <h2 id="p-robot-t">Self-Balancing Robot</h2>
+        <div class="role">Solo build · Design · Electronics · Firmware</div>
+        <span class="date">Fall 2026</span>
       </div>
-    </section>
-
-    <section class="block" aria-labelledby="cad-h">
-      <h3 id="cad-h">Interactive CAD model</h3>
-      <!--
-        CAD MODEL: replace the whole <div class="cad">...</div> below with ONE of these.
-
-        Option A (Fusion 360): open the design, click Share > Public Link, turn on "Embed",
-        copy the embed code, and paste it inside the div like this:
-          <div class="cad"><iframe src="PASTE-LINK-HERE" allowfullscreen></iframe></div>
-
-        Option B (Onshape): click Share > make it public > copy the link, then use the same iframe line.
-
-        Option C (any CAD program): export your model as a .glb file, upload it to images/,
-        then paste these two lines instead:
-          <script type="module" src="https://unpkg.com/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
-          <div class="cad"><model-viewer src="images/robot.glb" camera-controls auto-rotate alt="3D model of the robot"></model-viewer></div>
-      -->
-      <div class="cad">CAD model goes here<br>Visitors will be able to rotate and zoom it</div>
-    </section>
-
-    <div class="titleblock">
-      <div><span>Controller</span><b>Arduino Uno</b></div>
-      <div><span>Sensor</span><b>MPU-6050</b></div>
-      <div><span>Drive</span><b>L298N + DC motors</b></div>
-      <div><span>Power</span><b>3S LiPo</b></div>
-      <div><span>Rev</span><b>v6</b></div>
+      <button class="close" type="button" aria-label="Close">×</button>
     </div>
-  </article>
+    <div class="dbody">
+      <div class="viewer">
+        <!-- Shows robot.glb once you upload it next to this file. -->
+        <model-viewer src="robot.glb" poster="robot.jpg" camera-controls auto-rotate auto-rotate-delay="2000" interaction-prompt="none" shadow-intensity="1" camera-orbit="35deg 75deg auto" alt="3D model of the self-balancing robot"></model-viewer>
+        <span class="pill">Drag to rotate · Scroll to zoom</span>
+      </div>
+      <div class="dtext">
+        <p class="lead">A two-wheeled inverted pendulum that drives its wheels under its centre of mass to stay upright. I designed the chassis, wired the electronics and wrote all of the control code.</p>
+        <p>The robot is tall, so small sensor errors and motor differences quickly turn into drifting or tipping. A complementary filter fuses gyro and accelerometer data, and a 200 Hz PID loop with anti-windup drives the motors. An outer speed loop and auto-trim correct the balance point so it holds position. A serial tuning tool lets me adjust gains live and save them to EEPROM.</p>
+        <div class="statline">200 Hz loop · v6 firmware · [X min balance time]</div>
+        <div class="tags"><span class="tag">Arduino Uno</span><span class="tag">C++</span><span class="tag">MPU-6050</span><span class="tag">L298N</span><span class="tag">PID</span><span class="tag">FDM</span><span class="tag">[CAD tool]</span></div>
+        <div class="specs">
+          <div><span>Controller</span><b>Arduino Uno</b></div>
+          <div><span>Sensor</span><b>MPU-6050 IMU</b></div>
+          <div><span>Drive</span><b>L298N + DC motors</b></div>
+          <div><span>Power</span><b>3S LiPo</b></div>
+        </div>
+        <h4>Gallery</h4>
+        <!-- To add a picture: copy one <figure>...</figure>, change the file name and the caption. -->
+        <div class="thumbs">
+          <figure><img src="robot.jpg" alt="Finished robot"><figcaption>Finished robot, v6</figcaption></figure>
+          <figure><video src="video-1.mp4" muted loop playsinline autoplay preload="metadata" aria-label="Balancing test, side view"></video><figcaption>Balancing test, side view</figcaption></figure>
+          <figure><video src="video-2.mp4" muted loop playsinline autoplay preload="metadata" aria-label="Balancing test, front view"></video><figcaption>Balancing test, front view</figcaption></figure>
+          <figure><video src="video-3.mp4" muted loop playsinline autoplay preload="metadata" aria-label="Balancing test, low angle"></video><figcaption>Balancing test, low angle</figcaption></figure>
+        </div>
+        <a class="btn" href="#github" style="align-self:flex-start">View code on GitHub ↗</a>
+      </div>
+    </div>
+  </dialog>
+
+
+
+
+  <!-- ============ SKILLS ============ -->
+  <section class="block" id="skills">
+    <div class="wrap">
+      <div class="head">
+        <div>
+          <div class="eyebrow"><b>03</b> · Capabilities</div>
+          <h2>Skills</h2>
+        </div>
+      </div>
+      <div class="skills">
+        <div><div class="eyebrow">CAD &amp; design</div><h3>Modelling</h3><p>[SolidWorks / Fusion 360 / Onshape], design for 3D printing</p></div>
+        <div><div class="eyebrow">Fabrication</div><h3>Making</h3><p>FDM 3D printing, assembly, iterative prototyping</p></div>
+        <div><div class="eyebrow">Electronics</div><h3>Hardware</h3><p>Arduino, I²C sensors (IMU), H-bridge motor drivers, LiPo power, wiring</p></div>
+        <div><div class="eyebrow">Software</div><h3>Code &amp; control</h3><p>C++ (Arduino), PID control, sensor fusion, serial debugging</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="block" id="about">
+    <div class="wrap">
+      <div class="head">
+        <div>
+          <div class="eyebrow"><b>04</b> · About</div>
+          <h2>About me</h2>
+        </div>
+      </div>
+      <div class="about">
+        <div class="facts">
+          <div><span>University</span><b>University of Waterloo</b></div>
+          <div><span>Program</span><b>Honours Mechanical Engineering, Co-op</b></div>
+          <div><span>Expected</span><b>April 2031</b></div>
+          <div><span>Hometown</span><b>Milton, ON</b></div>
+          <div><span>Languages</span><b>English, Telugu</b></div>
+        </div>
+        <div class="bio">
+          <p>I'm a first-year mechanical engineering student who likes building things that move. I got started on a FIRST Robotics team in high school, and now I spend my spare time designing and tuning robots of my own.</p>
+          <p>Outside of engineering I spent five years in the Royal Canadian Air Cadets, where I rose to Warrant Officer Second Class and led a flight of 40+ cadets. I also co-organized BR Hacks, a school hackathon with 50+ participants.</p>
+          <h3>Awards &amp; recognition</h3>
+          <ul class="awards">
+            <li>Rookie Team Award, FIRST Robotics Competition <span>Team 9562</span></li>
+            <li>Certificate of Recognition, Adam van Koeverden, MP <span>June 2024</span></li>
+            <li>Certificate of Recognition, Zee Hamid, MPP <span>June 2024</span></li>
+            <li>CPR Level C &amp; Standard First Aid <span>Dec 2024</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </main>
 
-<footer class="wrap">
-  <span>Tanush Pilla · Mechanical Engineering, University of Waterloo</span>
-  <span>Last updated November 2026</span>
-</footer>
+<!-- ============ CONTACT ============ -->
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div class="eyebrow"><b>05</b> · Contact</div>
+    <h2>Let's talk co-op.</h2>
+    <div class="row">
+      <a class="email" href="mailto:tanushpilla@gmail.com">tanushpilla@gmail.com</a>
+      <button class="btn" type="button" id="copy-email">Copy email</button>
+    </div>
+    <div class="row" style="margin-top:20px">
+      <a class="btn solid" href="Tanush_Pilla_Resume.pdf" target="_blank" rel="noopener">Resume ↗</a>
+      <a class="btn" href="https://www.linkedin.com/in/tanush-pilla-b7b0a8281/" target="_blank" rel="noopener">LinkedIn ↗</a>
+      <a class="btn" href="#github">GitHub ↗</a>
+    </div>
+    <footer>
+      <span>© 2026 Tanush Pilla</span>
+      <span>Portfolio · Rev. Nov 2026</span>
+    </footer>
+  </div>
+</section>
 
+<script>
+  // Open a project window when its card is clicked
+  document.querySelectorAll('[data-open]').forEach(function (card) {
+    card.addEventListener('click', function () {
+      var d = document.getElementById(card.dataset.open);
+      if (!d) return;
+      d.showModal();
+      document.body.classList.add('locked');
+      d.querySelectorAll('.thumbs video').forEach(function (v) { var p = v.play(); if (p) p.catch(function () {}); });
+    });
+  });
+  document.querySelectorAll('dialog.proj').forEach(function (d) {
+    d.querySelector('.close').addEventListener('click', function () { d.close(); });
+    // click on the dark area outside the window closes it
+    d.addEventListener('click', function (e) { if (e.target === d) d.close(); });
+    d.addEventListener('close', function () {
+      document.body.classList.remove('locked');
+      d.querySelectorAll('video').forEach(function (v) { v.pause(); });
+    });
+  });
+  // Photo / Video / CAD switcher inside a window
+  document.querySelectorAll('.vtabs').forEach(function (tabs) {
+    tabs.querySelectorAll('button').forEach(function (b) {
+      b.addEventListener('click', function () {
+        tabs.querySelectorAll('button').forEach(function (o) {
+          var on = o === b;
+          o.setAttribute('aria-selected', on ? 'true' : 'false');
+          var pane = document.getElementById(o.dataset.pane);
+          pane.hidden = !on;
+          var v = pane.querySelector('video');
+          if (v) { if (on) { var p = v.play(); if (p) p.catch(function () {}); } else v.pause(); }
+        });
+      });
+    });
+  });
+  document.getElementById('copy-email').addEventListener('click', function () {
+    var btn = this;
+    try {
+      navigator.clipboard.writeText('tanushpilla@gmail.com').then(function () {
+        btn.textContent = 'Copied ✓';
+        setTimeout(function () { btn.textContent = 'Copy email'; }, 1800);
+      }, function () { btn.textContent = 'Copy failed'; });
+    } catch (e) { btn.textContent = 'Copy failed'; }
+  });
+</script>
 </body>
 </html>
