@@ -8,7 +8,7 @@
   HOW TO EDIT THIS PAGE
   - Projects: each project has a CARD in the gallery and a WINDOW (<dialog>) further down with the same id
     (card data-open="p-robot" opens <dialog id="p-robot">). To add one, copy a card and a dialog and give them a new matching id.
-  - Files it needs, uploaded next to this file: Tanush_Pilla_Resume.pdf, robot.jpg, video-1.mp4, video-2.mp4, video-3.mp4
+  - Files it needs, uploaded next to this file: Tanush_Pilla_Resume.pdf, isoView.jpg, video-1.mp4, video-2.mp4, video-3.mp4
   - Placeholders: every grey striped box is a spot for a picture. Replace the whole
       <div class="ph">...</div>   with   <img src="your-photo.jpg" alt="what the photo shows">
     and upload your-photo.jpg next to this file.
@@ -262,7 +262,7 @@ body.locked { overflow: hidden; }
         <button class="card" type="button" data-open="p-robot">
           <div class="media">
             <!-- 3D preview: shows the photo until robot.glb is uploaded next to this file -->
-            <model-viewer src="robot.glb" poster="robot.jpg" auto-rotate rotation-per-second="18deg" interaction-prompt="none" disable-zoom camera-orbit="35deg 75deg auto" shadow-intensity="1" alt="3D model of the self-balancing robot"></model-viewer>
+            <model-viewer src="robot.glb" poster="isoView.jpg" auto-rotate rotation-per-second="18deg" interaction-prompt="none" disable-zoom camera-orbit="35deg 75deg auto" shadow-intensity="1" alt="3D model of the self-balancing robot"></model-viewer>
             <span class="badge">3D model</span>
             <span class="hint">Click to explore ↗</span>
           </div>
@@ -300,7 +300,7 @@ body.locked { overflow: hidden; }
     <div class="dbody">
       <div class="viewer">
         <!-- Shows robot.glb once you upload it next to this file. -->
-        <model-viewer src="robot.glb" poster="robot.jpg" camera-controls auto-rotate auto-rotate-delay="2000" interaction-prompt="none" shadow-intensity="1" camera-orbit="35deg 75deg auto" alt="3D model of the self-balancing robot"></model-viewer>
+        <model-viewer src="robot.glb" poster="isoView.jpg" camera-controls auto-rotate auto-rotate-delay="2000" interaction-prompt="none" shadow-intensity="1" camera-orbit="35deg 75deg auto" alt="3D model of the self-balancing robot"></model-viewer>
         <span class="pill">Drag to rotate · Scroll to zoom</span>
       </div>
       <div class="dtext">
@@ -317,10 +317,13 @@ body.locked { overflow: hidden; }
         <h4>Gallery</h4>
         <!-- To add a picture: copy one <figure>...</figure>, change the file name and the caption. -->
         <div class="thumbs">
-          <figure><img src="robot.jpg" alt="Finished robot"><figcaption>Finished robot, v6</figcaption></figure>
-          <figure><video src="video-1.mp4" muted loop playsinline autoplay preload="metadata" aria-label="Balancing test, side view"></video><figcaption>Balancing test, side view</figcaption></figure>
-          <figure><video src="video-2.mp4" muted loop playsinline autoplay preload="metadata" aria-label="Balancing test, front view"></video><figcaption>Balancing test, front view</figcaption></figure>
-          <figure><video src="video-3.mp4" muted loop playsinline autoplay preload="metadata" aria-label="Balancing test, low angle"></video><figcaption>Balancing test, low angle</figcaption></figure>
+          <figure><img src="isoView.jpeg" alt="Full Robot"><figcaption>Full Robot</figcaption></figure>
+          <figure><video src="balancingVideo.mov.mov" muted loop playsinline autoplay preload="metadata" aria-label="Self Balancing Test"></video><figcaption>Self Balancing Test</figcaption></figure>
+          <figure><img src="botView.jpeg" alt="Bottom View"><figcaption>Bottom View</figcaption></figure>
+          <figure><img src="sideView.jpeg" alt="Side View"><figcaption>Side View</figcaption></figure>
+          <figure><img src="topView.jpeg" alt="Top View"><figcaption>Top View</figcaption></figure>
+          <figure><img src="closeUp.jpeg" alt="Close Up"><figcaption>Close Up of Electronics</figcaption></figure>
+
         </div>
         <a class="btn" href="#github" style="align-self:flex-start">View code on GitHub ↗</a>
       </div>
