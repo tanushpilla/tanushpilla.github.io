@@ -561,9 +561,13 @@ footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8p
 
   /* Show the CAD model only after it has loaded, so the photo poster never flashes. */
   document.querySelectorAll('model-viewer').forEach(function (mv) {
-    function show() { mv.reveal(); mv.classList.add('shown'); }
+    function show() {
+      mv.classList.add('shown');
+      if (typeof mv.dismissPoster === 'function') mv.dismissPoster();
+    }
     mv.addEventListener('load', show);
-    if (mv.loaded) show();
+    mv.addEventListener('error', function (e) { console.warn('3D model failed to load:', mv.src, e.detail); });
+    customElements.whenDefined('model-viewer').then(function () { if (mv.loaded) show(); });
   });
 
   /* ---------- Project windows ---------- */
