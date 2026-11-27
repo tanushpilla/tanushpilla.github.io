@@ -28,6 +28,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="preload" href="projects/self-balancing-robot/assets/models/robot.glb" as="fetch" crossorigin>
 <script type="module" src="https://unpkg.com/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
 <style>
 :root {
@@ -127,7 +128,9 @@ section.block { padding-top: 40px; padding-bottom: 72px; }
 .card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .card .media { position: relative; aspect-ratio: 16 / 10;
   background: linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 32px 32px, linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0 / 32px 32px, var(--sheet); }
-.card model-viewer { width: 100%; height: 100%; pointer-events: none; --poster-color: transparent; background: transparent; }
+.card model-viewer, .viewer model-viewer { opacity: 0; --poster-color: transparent; --progress-bar-height: 0px; }
+.card model-viewer.shown, .viewer model-viewer.shown { opacity: 1; }
+.card model-viewer { width: 100%; height: 100%; pointer-events: none; background: transparent; }
 .badge { position: absolute; left: 12px; top: 12px; font: 400 10px/1 var(--pixel); letter-spacing: .06em; background: var(--bg); border: 1px solid var(--line); padding: 7px 8px; border-radius: 2px; }
 .hint { position: absolute; right: 12px; bottom: 12px; font: 700 12px/1 var(--mono); background: var(--accent); color: #fff; padding: 9px 12px; border-radius: 2px; opacity: 0; transform: translateY(6px); transition: opacity .2s, transform .2s; }
 .card:hover .hint, .card:focus-visible .hint { opacity: 1; transform: none; }
@@ -149,7 +152,7 @@ dialog.proj::backdrop { background: rgba(5, 6, 9, .78); backdrop-filter: blur(3p
 .dbody { display: grid; grid-template-columns: 1fr 1fr; min-height: 0; flex: 1; }
 .viewer { position: relative; border-right: 1px solid var(--line); min-height: 420px;
   background: linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 40px 40px, linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0 / 40px 40px, var(--sheet); }
-.viewer model-viewer { position: absolute; inset: 0; width: 100%; height: 100%; --poster-color: transparent; }
+.viewer model-viewer { position: absolute; inset: 0; width: 100%; height: 100%; }
 .pill { position: absolute; left: 50%; bottom: 20px; transform: translateX(-50%); white-space: nowrap; font: 700 12px/1 var(--mono); background: var(--bg); border: 1px solid var(--line); padding: 11px 16px; border-radius: 999px; pointer-events: none; }
 .dtext { padding: 28px 30px 34px; overflow-y: auto; display: flex; flex-direction: column; gap: 18px; font-size: 15px; line-height: 1.7; }
 .dtext .lead { font-size: 16px; margin: 0; }
@@ -282,7 +285,7 @@ footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8p
           <button class="card" type="button" data-open="p-robot" aria-label="Open the Self-Balancing Robot project">
             <div class="media">
               <!-- 3D preview: projects/self-balancing-robot/assets/ -->
-              <model-viewer src="projects/self-balancing-robot/assets/models/robot.glb" poster="projects/self-balancing-robot/assets/images/iso-view.jpeg" auto-rotate rotation-per-second="18deg" interaction-prompt="none" disable-zoom camera-orbit="35deg 75deg auto" shadow-intensity="1" alt="3D model of the self-balancing robot"></model-viewer>
+              <model-viewer src="projects/self-balancing-robot/assets/models/robot.glb" reveal="manual" loading="eager" auto-rotate rotation-per-second="18deg" interaction-prompt="none" disable-zoom camera-orbit="35deg 75deg auto" shadow-intensity="1" alt="3D model of the self-balancing robot"></model-viewer>
               <span class="badge">3D MODEL</span>
               <span class="hint">Click to explore ↗</span>
             </div>
@@ -347,7 +350,7 @@ footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8p
   <div class="dbody">
     <div class="viewer">
       <!-- Interactive model: projects/self-balancing-robot/assets/models/robot.glb -->
-      <model-viewer src="projects/self-balancing-robot/assets/models/robot.glb" poster="projects/self-balancing-robot/assets/images/iso-view.jpeg" camera-controls auto-rotate auto-rotate-delay="2000" interaction-prompt="none" shadow-intensity="1" camera-orbit="35deg 75deg auto" alt="3D model of the self-balancing robot"></model-viewer>
+      <model-viewer src="projects/self-balancing-robot/assets/models/robot.glb" reveal="manual" loading="eager" camera-controls auto-rotate auto-rotate-delay="2000" interaction-prompt="none" shadow-intensity="1" camera-orbit="35deg 75deg auto" alt="3D model of the self-balancing robot"></model-viewer>
       <span class="pill">Drag to rotate · Scroll to zoom</span>
     </div>
     <div class="dtext">
@@ -555,6 +558,13 @@ footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8p
   showRocket(0);
   if (reduce) { window.addEventListener('scroll', function () { frame(true); }, { passive: true }); }
   else requestAnimationFrame(loop);
+
+  /* Show the CAD model only after it has loaded, so the photo poster never flashes. */
+  document.querySelectorAll('model-viewer').forEach(function (mv) {
+    function show() { mv.reveal(); mv.classList.add('shown'); }
+    mv.addEventListener('load', show);
+    if (mv.loaded) show();
+  });
 
   /* ---------- Project windows ---------- */
   document.querySelectorAll('[data-open]').forEach(function (card) {
