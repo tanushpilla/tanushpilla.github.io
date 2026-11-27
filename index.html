@@ -30,11 +30,11 @@
 <script type="module" src="https://unpkg.com/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
 <style>
 :root {
-  --bg: #131315;
-  --sheet: #1b1b1e;
+  --bg: #07080c;
+  --sheet: #15161b;
   --ink: #ebe8e2;
   --muted: #9b978f;
-  --line: #2c2c31;
+  --line: #2a2c35;
   --accent: #ff6a1f;
   --sky-low: #1a2742;
   --space: #07080b;
@@ -61,7 +61,7 @@ html { scroll-behavior: smooth; scroll-padding-top: 80px; }
 html, body { margin: 0; }
 body { background: var(--bg); color: var(--ink); font: 400 16px/1.8 var(--mono); -webkit-font-smoothing: antialiased; }
 /* film-grain texture */
-body::before { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: .22;
+body::before { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: .12;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
 a { color: var(--accent); }
 a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
@@ -73,7 +73,7 @@ img, video { max-width: 100%; display: block; }
 .inner { max-width: 820px; margin: 0 auto; padding: 0 40px; }
 
 /* Top bar */
-.topbar { position: sticky; top: 0; z-index: 20; padding: 18px 0; background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: blur(6px); }
+.topbar { position: sticky; top: 0; z-index: 20; padding: 18px 0; background: color-mix(in srgb, var(--bg) 55%, transparent); backdrop-filter: blur(3px); }
 .topbar .inner { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 .chip { display: inline-flex; align-items: center; gap: 6px; font: 700 13px/1 var(--mono); color: var(--ink); text-decoration: none; background: var(--sheet); border: 1px solid var(--line); padding: 11px 14px; border-radius: 4px; cursor: pointer; }
 .chip:hover { border-color: var(--accent); color: var(--accent); }
@@ -83,11 +83,14 @@ img, video { max-width: 100%; display: block; }
 /* Cover */
 .cover { min-height: calc(100vh - 80px); display: flex; flex-direction: column; justify-content: center; padding-top: 40px; padding-bottom: 80px; }
 .tminus { font: 400 13px/1 var(--pixel); color: var(--accent); letter-spacing: .08em; margin-bottom: 26px; }
-.cover h1 { font: 700 clamp(40px, 5vw, 68px)/1.05 var(--pixel); letter-spacing: .01em; margin: 0 0 22px; }
+.cover h1 { font: 700 clamp(44px, 6vw, 84px)/1.05 var(--pixel); letter-spacing: .01em; margin: 0 0 24px; color: var(--accent); }
 .tabs { display: flex; gap: 28px; margin-bottom: 56px; }
 .tabs a { font: 700 15px/1 var(--mono); color: var(--muted); text-decoration: none; }
 .tabs a:hover { color: var(--accent); }
-.program { font: 400 clamp(20px, 2.4vw, 28px)/1.55 var(--pixel); margin: 0 0 40px; }
+.program { display: inline-block; font: 700 clamp(20px, 2.5vw, 30px)/1.5 var(--pixel); margin: 0 0 40px;
+  background: linear-gradient(90deg, #8fe9ff 0%, #6aa8ff 55%, #b28cff 100%); -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(3px 3px 0 #0d1c46); }
+.program .uw { color: #ffd23f; -webkit-text-fill-color: #ffd23f; }
 .subline { font: 700 15px/1.6 var(--mono); margin: 0; }
 .subline span { color: var(--muted); font-weight: 400; }
 .scrollcue { margin-top: 64px; font: 400 12px/1 var(--pixel); color: var(--muted); letter-spacing: .08em; }
@@ -179,10 +182,10 @@ body.locked { overflow: hidden; }
 footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-top: 80px; padding: 20px 0 36px; border-top: 1px solid var(--line); font: 400 12px/1.4 var(--mono); color: var(--muted); }
 
 /* ---------- Launch panel (right) ---------- */
-.launch { position: fixed; top: 0; right: 0; bottom: 0; width: var(--panel-w); z-index: 2; overflow: hidden; background: var(--space);
-  border-left: 2px solid color-mix(in srgb, var(--ink) 25%, transparent); }
-.launch .atmo { position: absolute; inset: 0; background: linear-gradient(to top, var(--sky-low), color-mix(in srgb, var(--sky-low) 55%, var(--space))); }
-.launch canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.launch { position: fixed; top: 0; right: 0; bottom: 0; width: var(--panel-w); z-index: 2; overflow: hidden; background: transparent; }
+.launch .atmo, .pad .ground { -webkit-mask-image: linear-gradient(to right, transparent, #000 45%); mask-image: linear-gradient(to right, transparent, #000 45%); }
+.launch .atmo { position: absolute; inset: 0; background: linear-gradient(to top, var(--sky-low), transparent 75%); }
+#sky { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; }
 .launch .track { position: absolute; top: 0; bottom: 0; left: 50%; width: 4px; margin-left: -2px; opacity: .45;
   background: repeating-linear-gradient(to bottom, #d9d4cb 0 46px, transparent 46px 110px); }
 .rocket { position: absolute; left: 50%; top: 0; will-change: transform; filter: drop-shadow(0 6px 0 rgba(0,0,0,.25)); }
@@ -241,8 +244,6 @@ footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8p
       <a class="chip" href="https://github.com/tanushpilla" target="_blank" rel="noopener">github ↗</a>
       <a class="chip" href="Tanush_Pilla_Resume.pdf" target="_blank" rel="noopener">resume ↗</a>
       <a class="chip" href="mailto:tanushpilla@gmail.com">email ↗</a>
-      <span class="spacer"></span>
-      <button class="chip" type="button" id="theme">☀ light</button>
     </div>
   </nav>
 
@@ -254,7 +255,7 @@ footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8p
       <a href="#projects">projects</a>
       <a href="#contact">contact</a>
     </div>
-    <p class="program">Mechanical Engineering<br>at University of Waterloo</p>
+    <p class="program">Mechanical Engineering<br>at <span class="uw">University of Waterloo</span></p>
     <p class="subline">BASc Co-op · Class of 2031 <span>· currently in 1A</span></p>
     <div class="scrollcue">SCROLL TO LAUNCH <b>↓</b></div>
     <div class="mini" id="mini" aria-hidden="true"></div>
@@ -380,9 +381,9 @@ footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8p
 </dialog>
 
 <!-- ============ LAUNCH PANEL (decorative) ============ -->
+<canvas id="sky" aria-hidden="true"></canvas>
 <aside class="launch" aria-label="Rocket launch animation">
   <div class="atmo" id="atmo"></div>
-  <canvas id="sky"></canvas>
   <div class="track" id="track"></div>
   <div class="pad" id="pad"><div class="light"></div><div class="arm"></div><div class="tower"></div><div class="deck"></div><div class="ground"></div></div>
   <div class="rocket" id="rocket"></div>
@@ -404,16 +405,7 @@ footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8p
 (function () {
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ---------- Theme ---------- */
-  var root = document.documentElement, themeBtn = document.getElementById('theme');
-  function setTheme(t) {
-    if (t === 'light') root.setAttribute('data-theme', 'light'); else root.removeAttribute('data-theme');
-    themeBtn.textContent = t === 'light' ? '☾ dark' : '☀ light';
-    try { localStorage.setItem('theme', t); } catch (e) {}
-  }
-  var saved = null; try { saved = localStorage.getItem('theme'); } catch (e) {}
-  setTheme(saved || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'));
-  themeBtn.addEventListener('click', function () { setTheme(root.getAttribute('data-theme') === 'light' ? 'dark' : 'light'); });
+  var root = document.documentElement;
 
   /* ---------- Rockets (pixel maps) ----------
      w body · g body shade · o accent · r accent shade · b window · d band · k nozzle */
@@ -490,13 +482,13 @@ footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8p
   var panel = document.querySelector('.launch'), canvas = document.getElementById('sky'), ctx = canvas.getContext('2d');
   var atmo = document.getElementById('atmo'), track = document.getElementById('track'), pad = document.getElementById('pad');
   var altEl = document.getElementById('alt'), velEl = document.getElementById('vel'), phaseEl = document.getElementById('phase');
-  var PW = 0, PH = 0, stars = [], clouds = [];
+  var PW = 0, PH = 0, CX = 0, stars = [], clouds = [];
   function resize() {
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
-    PW = panel.clientWidth; PH = panel.clientHeight;
-    canvas.width = PW * dpr; canvas.height = PH * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    stars = []; for (var i = 0; i < 130; i++) stars.push({ x: Math.random() * PW, y: Math.random() * PH, s: Math.random() < .15 ? 3 : 2, z: .3 + Math.random() * .7 });
-    clouds = []; for (var j = 0; j < 7; j++) clouds.push({ x: Math.random() * PW - 40, wy: PH * (0.15 + j * 0.28) + Math.random() * 80, w: 5 + Math.floor(Math.random() * 6) });
+    PW = panel.clientWidth; PH = window.innerHeight; var VW = window.innerWidth; CX = VW - PW;
+    canvas.width = VW * dpr; canvas.height = PH * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    stars = []; var N = Math.round(VW * PH / 3000); for (var i = 0; i < N; i++) stars.push({ x: Math.random() * VW, y: Math.random() * PH, s: Math.random() < .15 ? 3 : 2, z: .3 + Math.random() * .7 });
+    clouds = []; for (var j = 0; j < 7; j++) clouds.push({ x: CX + Math.random() * PW - 40, wy: PH * (0.15 + j * 0.28) + Math.random() * 80, w: 5 + Math.floor(Math.random() * 6) });
   }
   window.addEventListener('resize', function () { resize(); frame(true); });
 
@@ -504,7 +496,7 @@ footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8p
   var PHASES = [[1, 'ON PAD'], [12, 'LIFTOFF'], [45, 'MAX Q'], [100, 'STAGE SEP'], [160, 'KÁRMÁN LINE'], [1e9, 'ORBIT']];
 
   function frame(force) {
-    if (!cur || !PW) return;
+    if (!cur || !(PW + CX)) return;
     var y = window.scrollY, max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
     var p = Math.min(1, Math.max(0, y / max));
     var d = y - lastY; lastY = y;
@@ -530,18 +522,18 @@ footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8p
     atmo.style.opacity = Math.max(0, 1 - alt / 130);
 
     // draw
-    ctx.clearRect(0, 0, PW, PH);
-    var light = root.getAttribute('data-theme') === 'light';
-    var starA = light ? Math.min(1, Math.max(0, (alt - 25) / 70)) : 0.35 + 0.65 * p;
+    ctx.clearRect(0, 0, PW + CX, PH);
+    var light = false;
+    var starA = 0.55 + 0.45 * p;
     var speed = reduce || y < 4 ? 0 : 0.25 + vel * 0.35;
     ctx.fillStyle = '#ebe8e2';
     stars.forEach(function (s) {
-      s.y += speed * s.z; if (s.y > PH) { s.y -= PH; s.x = Math.random() * PW; }
+      s.y += speed * s.z; if (s.y > PH) { s.y -= PH; s.x = Math.random() * (PW + CX); }
       ctx.globalAlpha = starA * (0.4 + 0.6 * s.z);
       ctx.fillRect(Math.round(s.x), Math.round(s.y), s.s, s.s);
     });
     var cloudA = Math.max(0, 1 - alt / 40);
-    if (cloudA > 0) {
+    if (cloudA > 0 && PW > 0) {
       ctx.globalAlpha = cloudA * (light ? 0.95 : 0.55);
       ctx.fillStyle = light ? '#ffffff' : '#34425c';
       var B = 8;
